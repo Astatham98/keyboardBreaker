@@ -6,7 +6,7 @@ def nothing(x):
     pass
 
 # Initializing the webcam feed.
-cap = cv2.cv2.imread('lightblue.jpg', cv2.IMREAD_UNCHANGED)
+cap = cv2.cv2.imread('together2.jpg', cv2.IMREAD_UNCHANGED)
 
 # Create a window named trackbars.
 cv2.namedWindow("Trackbars")

@@ -1,3 +1,4 @@
+from typing import List
 import cv2
 from mss.darwin import MSS as mss
 import numpy as np
@@ -18,8 +19,8 @@ class KeyboardBreaker:
 
         self.blue = np.array([31, 164, 196])
         self.blue2= np.array([179, 255, 255])
-        self.lblue = np.array([0, 104, 137])
-        self.lblue2 = np.array([115, 255, 255])
+        self.lblue = np.array([0, 0, 203])
+        self.lblue2 = np.array([179, 255, 255])
     
     def getScreenshot(self, dims=None):
         dimension = dims if dims is not None else self.dims
@@ -39,7 +40,7 @@ class KeyboardBreaker:
             return [int(x-15) for x in avg], [int(avg[0])+15, int(avg[1])+15]
         return None, None
 
-    def findLBlue(self):
+    def findLBlue(self) -> List[int]:
         img  = self.getScreenshot()
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -53,23 +54,24 @@ class KeyboardBreaker:
 
         
 
-    def combo(self):
+    def combo(self) -> bool:
         img  = self.getScreenshot()
         img2 = img[:,:,:3]
         combo = cv2.imread('combo.jpg', cv2.IMREAD_UNCHANGED)
         result = cv2.matchTemplate(img2, combo, cv2.TM_CCOEFF_NORMED)
         minv, maxv, minp, maxp = cv2.minMaxLoc(result)
-        print(maxv, maxp)
         if maxv > 0.85:
             return True
         return False
 
-    def get_letter(self):
-        pt1, pt2 = self.findBlue()
+    def get_letter(self, coords: List[int]) -> str:
+        if coords is None:
+            pt1, pt2 = self.findBlue()
+        else:
+            pt1, pt2 = coords
+
         if pt1 is None:
             return
-
-        print(pt1, pt2)
 
         dims = {
             'left': self.dims['left'] + pt1[0],
@@ -78,7 +80,7 @@ class KeyboardBreaker:
             'height': 30
         }
 
-        img = self.getScreenshot(dims=dims)     
+        img = self.getScreenshot(dims=dims)    
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
         text = pytesseract.image_to_string(gray, config='--psm 10')
@@ -87,16 +89,16 @@ class KeyboardBreaker:
             if t.isalpha() and t.isupper():
                 char = t
                 break
+            elif t.isalpha():
+                char = t
         
-
+        print(char)
         return char
 
     def press_button(self, char):
         pyautogui.press(char)
 
-        
-    
-
-
-keyboardBreaker = KeyboardBreaker()
-keyboardBreaker.get_letter()
+    def get_combo_letter(self):
+        coords = self.findBlue() if self.findBlue() else self.findLBlue()
+        print(coords)
+        return self.get_letter(coords=coords)
