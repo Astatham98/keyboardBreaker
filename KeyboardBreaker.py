@@ -15,5 +15,10 @@ class KeyboardBreaker:
     def getScreenshot(self):
         scr = self.SCT.grab(self.dims)
         img = np.array(scr)
+        print(img)
         cv2.imshow('image', img)
         cv2.waitKey()
+
+
+keyboardBreaker = KeyboardBreaker()
+keyboardBreaker.getScreenshot()
