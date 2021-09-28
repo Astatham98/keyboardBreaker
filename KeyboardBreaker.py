@@ -83,7 +83,7 @@ class KeyboardBreaker:
         img = self.getScreenshot(dims=dims)    
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
-        text = pytesseract.image_to_string(gray, config='--psm 10')
+        text = pytesseract.image_to_string(gray, config='-l eng --oem 3 --psm 10')
         char = ''
         for t in text:
             if t.isalpha() and t.isupper():
