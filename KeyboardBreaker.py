@@ -64,6 +64,18 @@ class KeyboardBreaker:
             return True
         return False
 
+    def EndGame(self) -> bool:
+        img = self.getScreenshot()[:,:,:3]
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        win = cv2.imread('win.jpg', cv2.IMREAD_GRAYSCALE)
+        result = cv2.matchTemplate(gray, win, cv2.TM_CCOEFF_NORMED)
+        minv, maxv, minp, maxp = cv2.minMaxLoc(result)
+        if maxv > 0.85:
+            return True
+        return False
+        
+
+
     def get_letter(self, coords: List[int]) -> str:
         if coords is None:
             pt1, pt2 = self.findBlue()

@@ -3,3 +3,4 @@ venv/
 .ds_Store
 *.pyc
 *.npy
+output/

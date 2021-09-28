@@ -1,18 +1,11 @@
 from KeyboardBreaker import KeyboardBreaker
-import keyboard
-from time import sleep
 
 class Game:
     def __init__(self):
         self.kb = KeyboardBreaker()
-        self.current_letter = None
-        self.finished = False
 
     def start(self):
-        while not self.finished:
-            if keyboard.is_pressed('a') == True:
-                self.finished = True
-                print(self.finished)
+        while not self.kb.EndGame():
 
             if self.isCombo():
                 letter = self.kb.get_combo_letter()
