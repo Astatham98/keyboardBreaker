@@ -1,0 +1,6 @@
+opencv_python==4.5.3.56
+mss==6.1.0
+pytesseract==0.3.7
+numpy==1.19.5
+tensorflow==2.6.0
+PyAutoGUI==0.9.53

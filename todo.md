@@ -8,4 +8,4 @@
 - [x] Game ends when wins is seen on the screen
 
 ## Extra tools
-- [ ] Create a tool to choose the game region 
+- [x] Create a tool to choose the game region 

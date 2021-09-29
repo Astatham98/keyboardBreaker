@@ -114,3 +114,6 @@ class KeyboardBreaker:
         coords = self.findBlue() if self.findBlue() else self.findLBlue()
         print(coords)
         return self.get_letter(coords=coords)
+
+    def setScreenDims(self, dims):
+        self.dims = dims

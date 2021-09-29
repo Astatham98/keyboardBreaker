@@ -10,6 +10,8 @@ tf.random.set_seed(24)
 class CNN:
     def __init__(self):
         self.model = keras.models.load_model('model_Nadam.h5')
+        self.screenDims = None
+        self.kb = KeyboardBreaker()
 
     def predict(self, combo=False):
         image = self.getPhoto(combo)
@@ -31,26 +33,27 @@ class CNN:
         return pred_dict[num]
 
     def getPhoto(self, combo: bool):
-        kb = KeyboardBreaker()
         if not combo:
-            pt1, pt2 = kb.findBlue()
+            pt1, pt2 = self.kb.findBlue()
         else:
-            pt1, pt2 = kb.findBlue() if kb.findBlue() else kb.findLBlue()
+            pt1, pt2 = self.kb.findBlue() if self.kb.findBlue() else self.kb.findLBlue()
             while pt1 is None:
-                pt1, pt2 = kb.findBlue() if kb.findBlue() else kb.findLBlue()
+                pt1, pt2 = self.kb.findBlue() if self.kb.findBlue() else self.kb.findLBlue()
 
         if pt1 is None:
             return
 
 
         dims = {
-            'left': kb.dims['left'] + pt1[0],
-            'top': kb.dims['top'] + pt1[1],
+            'left': self.screenDims['left'] + pt1[0],
+            'top': self.screenDims['top'] + pt1[1],
             'width': 30,
             'height': 30
         }
 
-        return kb.getScreenshot(dims=dims)
-
-
+        return self.kb.getScreenshot(dims=dims)
+    
+    def setScreenDims(self, dims):
+        self.screenDims = dims
+        self.kb.setScreenDims(dims)
 
